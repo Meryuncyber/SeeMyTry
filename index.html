@@ -1,50 +1,69 @@
 <!DOCTYPE html>
-<html lang="tr" class="scroll-smooth">
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Mikro Ticaret Botu</title>
+    <title>Micro Ticaret Botu</title>
 
-  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 
-  <meta name="description" content="Görselden ürün çıkar, açıklama ve fiyat tahmini yap, satış linkini anında oluştur." />
-  <meta property="og:title" content="Mikro Ticaret Botu" />
-  <meta property="og:description" content="AI destekli ama dışa bağımlı olmayan ürün satış çözümü." />
-  <meta property="og:type" content="website" />
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
 
-  <!-- TailwindCSS build tarafından otomatik inject edilir -->
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Manifest PWA için opsiyonel -->
-  <link rel="manifest" href="/manifest.json" />
+    <!-- SEO -->
+    <meta name="description" content="Yapay zekâ destekli görsel tanıma ile saniyeler içinde ürün açıklaması, fiyat ve satış linki oluşturan mikro ticaret asistanı." />
+    <meta name="keywords" content="micro-ticaret, yapay zeka, e-ticaret, image recognition, satış botu" />
+    <meta name="author" content="MerYunCyber" />
 
-  <meta name="theme-color" content="#1a202c" />
-</head>
+    <!-- Font & Style -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+      }
+    </style>
+  </head>
 
-<body class="bg-gray-900 text-gray-100 font-sans min-h-screen flex flex-col">
+  <body class="bg-gray-900 text-white min-h-screen flex flex-col items-center justify-start p-4">
+    <header class="w-full max-w-3xl mb-8 text-center">
+      <img src="/assets/logo.svg" alt="Micro Ticaret Botu Logo" class="mx-auto w-16 h-16 mb-4" />
+      <h1 class="text-3xl font-bold tracking-tight">Micro Ticaret Botu</h1>
+      <p class="text-gray-400 mt-2">Ürününü yükle, açıklama & fiyat otomatik oluşsun, satmaya başla.</p>
+    </header>
 
-  <noscript>
-    <div class="bg-red-600 text-white p-4 text-center font-semibold">
-      Bu uygulama JavaScript gerektirir. Lütfen etkinleştiriniz.
-    </div>
-  </noscript>
+    <main class="w-full max-w-3xl space-y-6">
+      <!-- Image Uploader -->
+      <section id="upload" class="bg-gray-800 p-6 rounded-2xl shadow-xl">
+        <h2 class="text-xl font-semibold mb-4">1. Ürün Fotoğrafını Yükle</h2>
+        <div id="ImageUploader"></div>
+      </section>
 
-  <header class="bg-gray-800 p-4 shadow-md flex justify-between items-center">
-    <a href="/" class="flex items-center space-x-2">
-      <img src="/assets/logo.svg" alt="Logo" class="w-10 h-10" />
-      <span class="text-xl font-bold tracking-wide">Mikro Ticaret Botu</span>
-    </a>
-  </header>
+      <!-- AI Processing Results -->
+      <section id="results" class="bg-gray-800 p-6 rounded-2xl shadow-xl hidden">
+        <h2 class="text-xl font-semibold mb-4">2. Tanıma & Açıklama & Fiyat</h2>
+        <div id="ResultCard"></div>
+      </section>
 
-  <main id="root" class="flex-grow px-4 sm:px-6 md:px-12 py-8 max-w-4xl mx-auto w-full"></main>
+      <!-- Sales Link Generator -->
+      <section id="link-generator" class="bg-gray-800 p-6 rounded-2xl shadow-xl hidden">
+        <h2 class="text-xl font-semibold mb-4">3. Satış Linki Oluştur</h2>
+        <div id="SalesLink"></div>
+      </section>
+    </main>
 
-  <footer class="bg-gray-800 p-4 text-center text-gray-400 text-sm select-none">
-    © 2025 MerYunCyber | Tüm Hakları Saklıdır
-  </footer>
+    <footer class="w-full max-w-3xl mt-12 text-center text-gray-600 text-sm border-t border-gray-700 pt-4">
+      © 2025 MerYunCyber | <a href="https://github.com/Meryuncyber" class="underline hover:text-white">GitHub</a>
+    </footer>
 
-  <script type="module" src="/src/main.jsx"></script>
+    <!-- React App Root -->
+    <div id="root"></div>
 
-</body>
-
-  </html>
+    <!-- Vite React Entry Point -->
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+        </html>
