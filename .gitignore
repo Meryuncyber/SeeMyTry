@@ -1,0 +1,97 @@
+# === Node.js ===
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# === Vite Cache ===
+.vite/
+dist/
+build/
+
+# === OS Junk ===
+.DS_Store
+Thumbs.db
+
+# === Env & Local Configs ===
+.env
+.env.local
+.env.*.local
+
+# === Editor Configs ===
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# === Log Files ===
+*.log
+
+# === Build Output ===
+*.tsbuildinfo
+*.map
+
+# === Static Deploy ===
+# Output from `vite build` or GitHub Pages
+docs/
+out/
+
+# === Optional PWA / Manifest Caches ===
+.cache/
+service-worker.js
+workbox-*.js
+
+# === Custom Asset Handling ===
+# If generated assets or optimized images are created at runtime
+src/assets/optimized/
+src/assets/temp/
+
+# === Model & Tensor Files (Optional) ===
+# Ignore heavy model training outputs or optional local models
+src/models/*.tflite
+src/models/*.onnx
+src/models/*.h5
+src/models/*.ckpt
+
+# === Tailwind JIT Cache (if used manually) ===
+.tailwind/
+
+# === Local uploads (if used in dev) ===
+uploads/
+tmp/
+
+# === ESLint/Prettier Reports ===
+eslint-report.html
+.prettierignore
+
+# === GitHub Specific ===
+.github/*.md
+.github/ISSUE_TEMPLATE/
+.github/PULL_REQUEST_TEMPLATE/
+
+# === Avoid Committing Keys or Tokens ===
+firebase.json
+firebase.rc
+*.key
+*.pem
+*.crt
+
+# === Parcel/Vite Preview Output (if used) ===
+.preview/
+
+# === React Dev Tools ===
+react-devtools-*
+
+# === Manifest Placeholder ===
+manifest.json
+
+# === Favicon in production ===
+*.ico
+
+# === Backup Files ===
+*.bak
+*~
+*.swp
+*.swo
+*.tmp
