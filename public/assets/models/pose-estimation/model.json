@@ -1,0 +1,84 @@
+{
+  "format": "graph-model",
+  "generatedBy": "TensorFlow.js Converter v4.8.0",
+  "convertedBy": "SeeMyTry Custom Exporter v1.0",
+  "modelTopology": {
+    "node": [
+      {
+        "name": "input_image",
+        "op": "Placeholder",
+        "attr": {
+          "dtype": { "type": "DT_FLOAT" },
+          "shape": {
+            "shape": {
+              "dim": [
+                { "size": -1 },
+                { "size": 192 },
+                { "size": 192 },
+                { "size": 3 }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "pose_net/output",
+        "op": "Conv2D",
+        "input": ["input_image", "pose_net/weights"],
+        "attr": {
+          "strides": [1, 1, 1, 1],
+          "padding": "SAME",
+          "data_format": "NHWC"
+        }
+      }
+    ],
+    "library": {},
+    "versions": { "producer": 1 }
+  },
+  "weightsManifest": [
+    {
+      "paths": ["weights.bin"],
+      "weights": [
+        {
+          "name": "pose_net/weights",
+          "shape": [3, 3, 3, 32],
+          "dtype": "float32"
+        },
+        {
+          "name": "pose_net/bias",
+          "shape": [32],
+          "dtype": "float32"
+        }
+      ]
+    }
+  ],
+  "signature": {
+    "inputs": {
+      "input_image": {
+        "dtype": "DT_FLOAT",
+        "tensorShape": {
+          "dim": [
+            { "size": -1 },
+            { "size": 192 },
+            { "size": 192 },
+            { "size": 3 }
+          ]
+        }
+      }
+    },
+    "outputs": {
+      "pose_output": {
+        "dtype": "DT_FLOAT",
+        "tensorShape": {
+          "dim": [
+            { "size": -1 },
+            { "size": 17 },
+            { "size": 3 }
+          ]
+        }
+      }
+    }
+  },
+  "backend": "webgl",
+  "modelHash": "f32129d31d4f237b96159c59d2cdefa2"
+      }
