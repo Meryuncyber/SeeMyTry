@@ -1,0 +1,75 @@
+{
+  "modelName": "micro-ticaret-product-classifier",
+  "version": "1.0.0",
+  "description": "Kullanıcı görsellerinden ürün tipi, kategori ve satış potansiyeli tahmini yapan hafif yapay zeka modeli.",
+  "inputShape": [224, 224, 3],
+  "labels": [
+    "electronics",
+    "clothing",
+    "accessories",
+    "home_decor",
+    "cosmetics",
+    "books",
+    "toys",
+    "sports",
+    "kitchen",
+    "unknown"
+  ],
+  "confidenceThreshold": 0.6,
+  "normalization": {
+    "mean": [0.485, 0.456, 0.406],
+    "std": [0.229, 0.224, 0.225],
+    "method": "standard"
+  },
+  "postProcessing": {
+    "topK": 3,
+    "fallbackCategory": "unknown",
+    "useSoftmax": true
+  },
+  "metaTags": {
+    "electronics": ["kablo", "cihaz", "adaptör", "ekran", "usb"],
+    "clothing": ["pantolon", "tişört", "şapka", "gömlek", "etek"],
+    "accessories": ["kolye", "bileklik", "çanta", "saat"],
+    "home_decor": ["vazo", "çerçeve", "duvar", "süs"],
+    "cosmetics": ["makyaj", "ruj", "parfüm", "serum"],
+    "books": ["kitap", "roman", "kapak", "sayfa"],
+    "toys": ["oyuncak", "peluş", "lego", "robot"],
+    "sports": ["top", "raket", "forma", "ayakkabı"],
+    "kitchen": ["bıçak", "tabak", "tencere", "kaşık"]
+  },
+  "tagRules": {
+    "priceSensitivity": {
+      "electronics": "high",
+      "clothing": "medium",
+      "accessories": "medium",
+      "home_decor": "low",
+      "cosmetics": "high",
+      "books": "low",
+      "toys": "medium",
+      "sports": "medium",
+      "kitchen": "low"
+    },
+    "platformSuitability": {
+      "electronics": ["Trendyol", "Hepsiburada", "Amazon"],
+      "clothing": ["Instagram", "Trendyol", "Zalando"],
+      "accessories": ["Instagram", "Etsy"],
+      "home_decor": ["Etsy", "Trendyol"],
+      "cosmetics": ["Instagram", "TikTok"],
+      "books": ["Kitapyurdu", "Amazon"],
+      "toys": ["Hepsiburada", "Amazon"],
+      "sports": ["Decathlon", "Trendyol"],
+      "kitchen": ["Amazon", "Trendyol"]
+    }
+  },
+  "outputs": {
+    "category": "string",
+    "confidence": "float",
+    "recommendedTags": ["string"],
+    "salesPlatforms": ["string"]
+  },
+  "modelSource": {
+    "framework": "TensorFlow.js",
+    "format": "GraphModel",
+    "url": "/src/models/tfjs_model/model.json"
+  }
+}
