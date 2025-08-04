@@ -1,22 +1,21 @@
+// src/components/ImageUploader.jsx
 import React, { useState, useCallback } from 'react';
-import { useImageRecognition } from '../hooks/useImageRecognition';
 import { useDropzone } from 'react-dropzone';
 import { FaImage, FaSpinner, FaTrash } from 'react-icons/fa';
 
-const ImageUploader = () => {
+const ImageUploader = ({ onDrop, isLoading, error, onRemove }) => {
   const [preview, setPreview] = useState(null);
-  const { isProcessing, error, processedData, processImage } = useImageRecognition();
 
-  const onDrop = useCallback(acceptedFiles => {
+  const handleDrop = useCallback(acceptedFiles => {
     const file = acceptedFiles[0];
     if (file) {
       setPreview(URL.createObjectURL(file));
-      processImage(file);
+      onDrop(file); // App.jsx'ten gelen fonksiyonu çağır
     }
-  }, [processImage]);
+  }, [onDrop]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
+    onDrop: handleDrop,
     accept: {
       'image/jpeg': ['.jpeg', '.jpg'],
       'image/png': ['.png'],
@@ -26,7 +25,7 @@ const ImageUploader = () => {
 
   const handleRemoveImage = () => {
     setPreview(null);
-    
+    onRemove(); // App.jsx'ten gelen fonksiyonu çağır
   };
 
   return (
@@ -60,7 +59,7 @@ const ImageUploader = () => {
         </div>
       )}
 
-      {isProcessing && (
+      {isLoading && (
         <div className="mt-4 flex items-center justify-center text-indigo-400">
           <FaSpinner className="animate-spin mr-2" />
           <span>Analiz ediliyor, lütfen bekleyin...</span>
@@ -72,16 +71,9 @@ const ImageUploader = () => {
           <p>Hata: {error}</p>
         </div>
       )}
-
-      {processedData && !isProcessing && (
-        <div className="mt-4 p-4 bg-green-600 text-white rounded-lg">
-          <p>İşlem başarıyla tamamlandı!</p>
-          {/* Sonuç verileri buradan diğer bileşenlere iletilecek */}
-        </div>
-      )}
     </div>
   );
 };
 
 export default ImageUploader;
-      
+  
