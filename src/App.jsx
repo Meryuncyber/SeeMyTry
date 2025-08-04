@@ -1,7 +1,7 @@
 // src/App.jsx
 import React, { useState, useEffect } from 'react';
 import ImageUploader from './components/ImageUploader';
-import ResultCard from './components/ResultCard'; 
+import ProductRecognition from './components/ProductRecognition'; // ProductRecognition bileşenini import edin
 import { recognizeProduct, initializeGemini } from './services/imageRecognitionService';
 import './styles/index.css';
 
@@ -48,8 +48,9 @@ function App() {
           onRemove={handleRemoveImage}
         />
         
+        {/* Hatalı kısmı ProductRecognition bileşeni ile değiştirin */}
         {productData && !isLoading && (
-          <ResultCard data={productData} />
+          <ProductRecognition recognitionData={productData} />
         )}
       </div>
       
@@ -62,4 +63,4 @@ function App() {
 }
 
 export default App;
-      
+    
