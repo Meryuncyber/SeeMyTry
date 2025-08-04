@@ -58,7 +58,7 @@ export const recognizeProduct = async (file) => {
 
   } catch (error) {
     console.error("Gemini API çağrısı sırasında bir hata oluştu:", error);
-    throw new Error("Ürün tanıma işlemi başarısız oldu. Lütfen geçerli bir ürün resmi yükleyin.");
+    throw new Error(`Resim tanıma işlemi başarısız oldu. Hata: ${error.message}`);
   }
 };
-      
+                      
