@@ -1,58 +1,77 @@
 import * as tf from '@tensorflow/tfjs';
-// product-classifier-model.json dosyasını yüklediğimizi varsayıyoruz.
-// Gerçek bir senaryoda bu dosya, eğitilmiş modelin yapısını ve ağırlıklarını içerecektir.
-// import model from '../models/product-classifier-model.json'; 
 
-let productModel;
-const labels = ['Akıllı Telefon', 'Kitap', 'Kulaklık', 'Sırt Çantası', 'Ayakkabı', 'Saat', 'Oyuncak', 'Diğer Elektronik'];
+// Bu, yüklenen modeli saklayacağımız global bir değişkendir.
+// Modeli bir kez yüklüyoruz ve tekrar kullanıyoruz.
+let productClassifierModel;
+
+// Modelin yükleneceği yol
+const MODEL_URL = '/models/product-classifier-model.json';
+
+// Örnek olarak kullanacağımız etiketler (sınıflar)
+// Gerçek bir modelde bu etiketler modelin eğitim çıktısından elde edilir.
+const LABELS = ['Elektronik', 'Kitap', 'Giyim', 'Mobilya', 'Aksesuar'];
 
 /**
  * Makine öğrenimi modelini yükler.
- * Bu fonksiyon, uygulama başladığında bir kez çağrılmalıdır.
+ * Uygulama başladığında main.jsx dosyasından çağrılır.
+ * @returns {Promise<tf.LayersModel>} Yüklenen model nesnesi.
  */
 export const loadModel = async () => {
+  if (productClassifierModel) {
+    return productClassifierModel;
+  }
+  
   try {
-    // Gerçek bir senaryoda bu kod aktif hale getirilir.
-    // productModel = await tf.loadLayersModel('url_to_model.json'); 
-    console.log("Mock makine öğrenimi modeli yüklendi.");
+    console.log("Makine öğrenimi modeli yükleniyor...");
+    productClassifierModel = await tf.loadLayersModel(MODEL_URL);
+    console.log("Model başarıyla yüklendi.");
+    return productClassifierModel;
   } catch (error) {
-    console.error("Model yüklenirken hata oluştu:", error);
+    console.error("Model yüklenirken bir hata oluştu:", error);
+    throw new Error("Model yüklenemedi. Lütfen internet bağlantınızı kontrol edin.");
   }
 };
 
 /**
- * Yüklenen bir resim dosyasını işleyerek ürün tanıma işlemi yapar.
- * @param {File} imageFile - Kullanıcı tarafından yüklenen resim dosyası.
- * @returns {Promise<Object>} Tanımlanan ürünle ilgili verileri içeren bir nesne.
+ * Resmi işler, modeli kullanarak tahmin yapar ve sonucu döndürür.
+ * @param {HTMLImageElement} imageElement - Tanınacak resim elementi.
+ * @returns {Promise<{name: string, confidence: number}>} En yüksek doğruluk oranına sahip ürün tahmini.
  */
-export const recognizeImage = async (imageFile) => {
-  // Modelin yüklü olup olmadığını kontrol et
-  // if (!productModel) {
-  //   throw new Error("Model henüz yüklenmedi.");
-  // }
-
-  console.log("Resim tanıma işlemi başlatıldı...");
-
-  // Gerçek bir senaryoda, resimden bir Tensor oluşturulur, modele beslenir ve tahmin yapılır.
-  // Bu kod, resim işleme mantığını simüle etmek için yazılmıştır.
-  const randomDelay = Math.floor(Math.random() * 2000) + 1000; // 1-3 saniye arası rastgele gecikme
-  await new Promise(resolve => setTimeout(resolve, randomDelay));
-
-  try {
-    // Resimden ürün adını ve kategorisini tahmin etme simülasyonu
-    const randomIndex = Math.floor(Math.random() * labels.length);
-    const mockPrediction = {
-      productName: `Örnek ${labels[randomIndex]}`,
-      category: labels[randomIndex],
-      originalImage: URL.createObjectURL(imageFile),
-      confidence: (Math.random() * 0.2 + 0.8).toFixed(2) // %80-100 arası güvenilirlik
-    };
-
-    console.log("Resim tanıma sonucu:", mockPrediction);
-
-    return mockPrediction;
-  } catch (error) {
-    console.error("Resim tanıma işlemi başarısız:", error);
-    throw new Error("Resim tanıma işlemi sırasında bir hata oluştu.");
+export const recognizeProduct = async (imageElement) => {
+  // Model yüklü değilse, önce yükle
+  if (!productClassifierModel) {
+    await loadModel();
   }
+
+  // Resmi modelin beklediği formata dönüştürme (örneğin 224x224 piksel)
+  const tensor = tf.browser.fromPixels(imageElement)
+    .resizeNearestNeighbor([224, 224]) // Resim boyutunu modelin beklentisine göre ayarla
+    .toFloat()
+    .expandDims();
+
+  // Resmi normalize etme (0-1 aralığına getirme)
+  const normalized = tensor.div(tf.scalar(255));
+  
+  // Modeli kullanarak tahmin yapma
+  const prediction = productClassifierModel.predict(normalized);
+  
+  // Tahmin sonuçlarını işleme
+  const result = await prediction.data();
+  const topPrediction = Array.from(result)
+    .map((confidence, index) => ({ confidence, label: LABELS[index] }))
+    .sort((a, b) => b.confidence - a.confidence)[0];
+
+  // Bellek yönetimi
+  tf.dispose([tensor, normalized, prediction]);
+
+  console.log("Ürün tanıma tamamlandı:", topPrediction);
+  
+  // Gerçek bir tahmine yakın sahte veri döndürme
+  // Bu, modelin çalışmasını simüle eder.
+  const mockConfidence = topPrediction.confidence * 100;
+  
+  return {
+    name: topPrediction.label,
+    confidence: parseFloat(mockConfidence.toFixed(2))
+  };
 };
