@@ -1,0 +1,23 @@
+{
+  "name": "Mikro Ticaret Botu",
+  "short_name": "Ticaret Botu",
+  "description": "Yüklediğiniz ürün resimlerini tanıyarak otomatik açıklama, fiyat tahmini ve satış bağlantısı oluşturan akıllı asistan.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#1a202c",
+  "theme_color": "#1a202c",
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "orientation": "portrait"
+}
