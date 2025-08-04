@@ -1,6 +1,7 @@
+// vite.config.js - Düzeltilmiş ve müdahale edilmiş versiyon
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import { resolve } from 'path'; // `path` modülünü import ediyoruz
+import { resolve } from 'path';
 
 export default defineConfig({
   plugins: [react()],
@@ -13,11 +14,5 @@ export default defineConfig({
     outDir: 'dist',
     sourcemap: true,
   },
-  // Bu bölümü ekliyoruz:
-  resolve: {
-    alias: {
-      '@': resolve(__dirname, 'src'),
-    },
-  },
-  publicDir: 'src/models', // Model dosyalarını public dizini olarak belirtiyoruz.
+  
 });
