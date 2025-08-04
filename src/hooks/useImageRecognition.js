@@ -18,7 +18,7 @@ export const useImageRecognition = () => {
 
     try {
       // imageRecognitionService servisini çağırarak resim işleme işlemini başlat
-      const result = await recognizeImage(imageFile);
+      const result = await recognizeProduct(imageFile);
       setProcessedData(result);
     } catch (err) {
       console.error("Resim tanıma işlemi sırasında bir hata oluştu:", err);
