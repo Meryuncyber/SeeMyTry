@@ -1,66 +1,69 @@
 // src/App.jsx
-import React, { useState, useEffect } from 'react';
-import ImageUploader from './components/ImageUploader';
-import ProductRecognition from './components/ProductRecognition'; // ProductRecognition bileşenini import edin
-import { recognizeProduct, initializeGemini } from './services/imageRecognitionService';
-import './styles/index.css';
+// ... diğer import'lar ...
+import ProductRecognition from './components/ProductRecognition';
+import ManualInputForm from './components/ManualInputForm'; // Yeni bir bileşen
 
 function App() {
   const [productData, setProductData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  
-  useEffect(() => {
-    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-    initializeGemini(apiKey);
-  }, []);
+  const [isManualInput, setIsManualInput] = useState(false); // Yeni durum
+
+  // ... (useEffect ve diğer fonksiyonlar aynı kalır) ...
 
   const handleImageUpload = async (file) => {
     setIsLoading(true);
     setError(null);
+    setProductData(null); // Veriyi temizle
 
     try {
       const data = await recognizeProduct(file);
       setProductData(data);
     } catch (err) {
       console.error(err);
-      setError("Resim tanıma işlemi başarısız oldu. Lütfen geçerli bir ürün resmi yükleyin.");
+      setError("Resim tanıma işlemi başarısız oldu.");
+      setIsManualInput(true); // Hata durumunda manuel girişi etkinleştir
     } finally {
       setIsLoading(false);
     }
   };
-
-  const handleRemoveImage = () => {
-    setProductData(null);
-    setError(null);
+  
+  // Manuel girişten gelen veriyi işleyecek fonksiyon
+  const handleManualSubmit = (data) => {
+    setProductData(data);
+    setIsManualInput(false);
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center justify-center p-4">
-      <h1 className="text-4xl font-bold mb-4">Mikro Ticaret Botu</h1>
-      <p className="text-lg text-gray-400 mb-8">Fotoğrafını yükle, gerisini o halletsin.</p>
-
-      <div className="w-full max-w-xl">
-        <ImageUploader 
-          onDrop={handleImageUpload} 
-          isLoading={isLoading} 
-          error={error} 
-          onRemove={handleRemoveImage}
-        />
-        
-        {/* Hatalı kısmı ProductRecognition bileşeni ile değiştirin */}
-        {productData && !isLoading && (
-          <ProductRecognition recognitionData={productData} />
-        )}
-      </div>
+    // ...
+    <div className="w-full max-w-xl">
+      <ImageUploader 
+        onDrop={handleImageUpload} 
+        isLoading={isLoading} 
+        error={error} 
+        onRemove={handleRemoveImage}
+      />
       
-      <footer className="mt-12 text-gray-500 text-sm">
-        <p>© 2024 Mikro Ticaret Botu. Tüm Hakları Saklıdır.</p>
-        <p>Bu proje bir eğitim çalışmasıdır.</p>
-      </footer>
+      {isLoading && (
+        <div className="text-center mt-4">
+          <p>Analiz ediliyor...</p>
+        </div>
+      )}
+
+      {isManualInput && !isLoading && (
+        <div className="bg-gray-800 p-6 rounded-lg mt-4">
+          <p className="text-red-400 mb-4">Otomatik tanıma başarısız oldu. Lütfen ürün bilgilerini manuel girin.</p>
+          <ManualInputForm onSubmit={handleManualSubmit} />
+        </div>
+      )}
+
+      {productData && !isLoading && (
+        <ProductRecognition recognitionData={productData} />
+      )}
     </div>
+    // ...
   );
 }
 
 export default App;
-    
+        
