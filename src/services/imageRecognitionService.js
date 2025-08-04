@@ -1,77 +1,64 @@
-import * as tf from '@tensorflow/tfjs';
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// Bu, yüklenen modeli saklayacağımız global bir değişkendir.
-// Modeli bir kez yüklüyoruz ve tekrar kullanıyoruz.
-let productClassifierModel;
+let genAI;
 
-// Modelin yükleneceği yol
-const MODEL_URL = '/product-classifier-model.json';
-
-// Örnek olarak kullanacağımız etiketler (sınıflar)
-// Gerçek bir modelde bu etiketler modelin eğitim çıktısından elde edilir.
-const LABELS = ['Elektronik', 'Kitap', 'Giyim', 'Mobilya', 'Aksesuar'];
-
-/**
- * Makine öğrenimi modelini yükler.
- * Uygulama başladığında main.jsx dosyasından çağrılır.
- * @returns {Promise<tf.LayersModel>} Yüklenen model nesnesi.
- */
-export const loadModel = async () => {
-  if (productClassifierModel) {
-    return productClassifierModel;
+export const initializeGemini = (apiKey) => {
+  if (apiKey) {
+    genAI = new GoogleGenerativeAI(apiKey);
+    console.log("Gemini API hazırlandı.");
+  } else {
+    console.error("Gemini API anahtarı bulunamadı.");
   }
-  
+};
+
+const getBase64 = (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+};
+
+export const recognizeProduct = async (file) => {
+  if (!genAI) {
+    throw new Error("Gemini API başlatılmadı. Lütfen API anahtarını kontrol edin.");
+  }
+
+  const model = genAI.getGenerativeModel({ model: "gemini-pro-vision" });
+
   try {
-    console.log("Makine öğrenimi modeli yükleniyor...");
-    productClassifierModel = await tf.loadLayersModel(MODEL_URL);
-    console.log("Model başarıyla yüklendi.");
-    return productClassifierModel;
+    const base64Image = await getBase64(file);
+    const mimeType = file.type;
+
+    const parts = [
+      {
+        text: "Bu bir e-ticaret ürünü fotoğrafıdır. Bana ürünün adını, kategorisini ve tahmini bir açıklamasını ver. Sadece Türkçe yanıt ver. Örneğin: Ürün Adı: Siyah Deri Çanta, Kategori: Aksesuar, Açıklama: Klasik tasarımlı, şık ve kullanışlı bir siyah deri çanta.",
+      },
+      {
+        inlineData: {
+          data: base64Image.split(",")[1],
+          mimeType: mimeType,
+        },
+      },
+    ];
+
+    const result = await model.generateContent({ contents: [{ parts }] });
+    const response = await result.response;
+    const text = response.text();
+    console.log("Gemini yanıtı:", text);
+    
+    // Yanıtı ayrıştır
+    const lines = text.split('\n');
+    const productName = lines.find(line => line.startsWith('Ürün Adı:'))?.split(': ')[1] || 'Bilinmiyor';
+    const category = lines.find(line => line.startsWith('Kategori:'))?.split(': ')[1] || 'Bilinmiyor';
+    const description = lines.find(line => line.startsWith('Açıklama:'))?.split(': ')[1] || 'Bilinmiyor';
+
+    return { name: productName, category: category, description: description };
+
   } catch (error) {
-    console.error("Model yüklenirken bir hata oluştu:", error);
-    throw new Error("Model yüklenemedi. Lütfen internet bağlantınızı kontrol edin.");
+    console.error("Gemini API çağrısı sırasında bir hata oluştu:", error);
+    throw new Error("Ürün tanıma işlemi başarısız oldu. Lütfen geçerli bir ürün resmi yükleyin.");
   }
 };
-
-/**
- * Resmi işler, modeli kullanarak tahmin yapar ve sonucu döndürür.
- * @param {HTMLImageElement} imageElement - Tanınacak resim elementi.
- * @returns {Promise<{name: string, confidence: number}>} En yüksek doğruluk oranına sahip ürün tahmini.
- */
-export const recognizeProduct = async (imageElement) => {
-  // Model yüklü değilse, önce yükle
-  if (!productClassifierModel) {
-    await loadModel();
-  }
-
-  // Resmi modelin beklediği formata dönüştürme (örneğin 224x224 piksel)
-  const tensor = tf.browser.fromPixels(imageElement)
-    .resizeNearestNeighbor([224, 224]) // Resim boyutunu modelin beklentisine göre ayarla
-    .toFloat()
-    .expandDims();
-
-  // Resmi normalize etme (0-1 aralığına getirme)
-  const normalized = tensor.div(tf.scalar(255));
-  
-  // Modeli kullanarak tahmin yapma
-  const prediction = productClassifierModel.predict(normalized);
-  
-  // Tahmin sonuçlarını işleme
-  const result = await prediction.data();
-  const topPrediction = Array.from(result)
-    .map((confidence, index) => ({ confidence, label: LABELS[index] }))
-    .sort((a, b) => b.confidence - a.confidence)[0];
-
-  // Bellek yönetimi
-  tf.dispose([tensor, normalized, prediction]);
-
-  console.log("Ürün tanıma tamamlandı:", topPrediction);
-  
-  // Gerçek bir tahmine yakın sahte veri döndürme
-  // Bu, modelin çalışmasını simüle eder.
-  const mockConfidence = topPrediction.confidence * 100;
-  
-  return {
-    name: topPrediction.label,
-    confidence: parseFloat(mockConfidence.toFixed(2))
-  };
-};
+      
