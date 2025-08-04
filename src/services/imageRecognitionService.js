@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-let genAI;
+export let genAI;
 
 export const initializeGemini = (apiKey) => {
   if (apiKey) {
