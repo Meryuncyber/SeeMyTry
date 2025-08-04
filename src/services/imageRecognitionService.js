@@ -5,7 +5,7 @@ import * as tf from '@tensorflow/tfjs';
 let productClassifierModel;
 
 // Modelin yükleneceği yol
-const MODEL_URL = '/models/product-classifier-model.json';
+const MODEL_URL = '/product-classifier-model.json';
 
 // Örnek olarak kullanacağımız etiketler (sınıflar)
 // Gerçek bir modelde bu etiketler modelin eğitim çıktısından elde edilir.
