@@ -1,0 +1,34 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Global stiller veya temel ayarlar burada tanımlanabilir.
+  Örneğin, tüm elemanlar için box-sizing ayarı:
+*/
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Vücut (body) için genel font ve renk ayarları.
+  Bu ayarlar `index.html` dosyasındaki sınıflarla uyumlu olmalıdır.
+  Tailwind CSS sınıfları sayesinde bu genellikle App.jsx veya Layout.jsx'te yapılır.
+*/
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* `#root` elementi için tam ekran yüksekliği ve flexbox ayarı.
+  Bu, içeriğin dikeyde ortalanması veya düzenlenmesi için faydalı olabilir.
+*/
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
