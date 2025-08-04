@@ -1,3 +1,4 @@
+// src/utils/formatters.js
 /**
  * Sayısal bir değeri Türk Lirası para birimi formatına dönüştürür.
  * @param {number} value - Formatlanacak sayısal değer.
@@ -8,16 +9,11 @@ export const formatCurrency = (value) => {
     return '₺0,00';
   }
 
-  // toLocaleString ile para birimi formatını otomatik olarak oluştururuz.
-  // 'tr-TR' locale'i ve 'TRY' (Türk Lirası) para birimi kullanılır.
   return new Intl.NumberFormat('tr-TR', {
     style: 'currency',
     currency: 'TRY',
-    minimumFractionDigits: 0, // Küsüratları göstermemek için
-    maximumFractionDigits: 0, // Küsüratları göstermemek için
+    minimumFractionDigits: 2, // Küsüratların gösterilmesi için
+    maximumFractionDigits: 2, // Küsüratların gösterilmesi için
   }).format(value);
 };
-
-// Gelecekte eklenebilecek diğer formatlama fonksiyonları için bir yer tutucu
-// export const formatDate = (date) => { ... };
-// export const formatPercentage = (value) => { ... };
+      
