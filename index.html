@@ -1,31 +1,22 @@
 <!DOCTYPE html>
 <html lang="tr">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Yapay zekâ destekli mikro ticaret otomasyonu. Fotoğrafla ürün tanımla, açıklama oluştur, fiyat tahminle, satış bağlantısı al." />
-    <link rel="icon" href="/favicon.ico" />
-    <link rel="manifest" href="/manifest.json" />
-    <title>Micro Ticaret Botu</title>
-    <script type="module" src="/src/main.jsx"></script>
-  </head>
-  <body class="bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300">
-    <div id="root" class="min-h-screen flex flex-col items-center justify-center px-4 py-8">
-      <noscript>
-        <div class="p-4 bg-red-100 text-red-800 rounded-md text-center">
-          Bu uygulama çalışmak için JavaScript gerektirir.
-        </div>
-      </noscript>
-    </div>
+    <title>Mikro Ticaret Botu - Akıllı Ürün Asistanınız</title>
 
-    <!-- TailwindCSS CDN fallback (sadece development/test için; prod'da build üzerinden kullanılır) -->
-    <script>
-      if (!window.tailwind) {
-        const link = document.createElement("link");
-        link.href = "https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css";
-        link.rel = "stylesheet";
-        document.head.appendChild(link);
-      }
-    </script>
-  </body>
-  </html>
+    <meta name="description" content="Yüklediğiniz ürün resimlerini tanıyarak otomatik açıklama, fiyat tahmini ve satış bağlantısı oluşturan akıllı asistan." />
+    <meta name="theme-color" content="#1a202c" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body class="bg-gray-900 text-gray-100 font-sans">
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+</body>
+      </html>
+      
