@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { recognizeImage } from '../services/imageRecognitionService';
+import { recognizeProduct } from '../services/imageRecognitionService';
 
 export const useImageRecognition = () => {
   const [isProcessing, setIsProcessing] = useState(false);
