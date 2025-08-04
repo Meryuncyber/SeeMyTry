@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
 import './styles/index.css';
-import { loadModel } from './services/imageRecognitionService';
 
 // PWA servis çalışanını kaydetme
 const registerServiceWorker = async () => {
@@ -18,15 +17,6 @@ const registerServiceWorker = async () => {
 
 // Uygulamayı başlatacak ana fonksiyon
 const startApp = async () => {
-  // Makine öğrenimi modelini önceden yükle
-  // Bu işlem, uygulamanın diğer kısımları yüklenirken arka planda çalışabilir.
-  try {
-    await loadModel();
-    console.log("Makine öğrenimi modeli başarıyla yüklendi.");
-  } catch (error) {
-    console.error("Model yüklenirken bir sorun oluştu:", error);
-  }
-
   // PWA servis çalışanını kaydet
   registerServiceWorker();
 
@@ -39,3 +29,4 @@ const startApp = async () => {
 
 // Uygulamayı başlat
 startApp();
+  
