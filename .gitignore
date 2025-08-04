@@ -1,0 +1,34 @@
+# Proje bağımlılıklarının kurulduğu dizin
+/node_modules
+
+# Vite ve diğer derleme araçları tarafından oluşturulan çıktı dizinleri
+/dist
+/build
+.vite/
+
+# Çeşitli editörler ve IDE'ler tarafından oluşturulan yapılandırma dosyaları
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+*.seed
+*.log
+
+# VS Code için kullanıcı ayarları
+.vscode/
+
+# Node.js önbellek dizinleri
+.cache/
+.pnp.*
+
+# Windows için küçük resim önbelleği
+Thumbs.db
+
+# Kendi oluşturduğunuz model dosyaları gibi büyük veya hassas veriler
+# Bu satırı, gerçek model dosyalarınız olduğunda ekleyebilirsiniz.
+# src/models/product-classifier-model.json 
